@@ -33,11 +33,10 @@ def get_process_listening_port(proc):
 
             conn = next(filter(lambda conn: conn.status == "LISTEN", child.connections()))
     else:
-        psutil_proc = psutil.Process(proc.pid)
-        while not any(conn is None and conn.status == "LISTEN" for conn in psutil_proc.connections()):
+        while not any(conn is None and conn.status == "LISTEN" for conn in psutil.Process(proc.pid).connections()):
             time.sleep(0.01)
 
-        conn = next(filter(lambda conn: conn.status == "LISTEN", psutil_proc.connections()))
+        conn = next(filter(lambda conn: conn.status == "LISTEN", psutil.Process(proc.pid).connections()))
     return conn.laddr.port
 
 
