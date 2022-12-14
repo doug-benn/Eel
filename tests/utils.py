@@ -18,6 +18,7 @@ TEST_DATA_DIR = Path(__file__).parent / "data"
 
 
 def get_process_listening_port(proc):
+    print(proc.pid)
     conn = None
     # if platform.system() == "Windows":
     current_process = psutil.Process(proc.pid)
@@ -37,7 +38,7 @@ def get_process_listening_port(proc):
     #     while not any(conn is None and conn.status == "LISTEN" for conn in psutil_proc.connections()):
     #         time.sleep(0.01)
 
-    #     conn = next(filter(lambda conn: conn.status == "LISTEN", psutil_proc.connections()))
+    #         conn = next(filter(lambda conn: conn.status == "LISTEN", psutil_proc.connections()))
     return conn.laddr.port
 
 
@@ -65,7 +66,7 @@ import {os.path.splitext(os.path.basename(example_py))[0]}
         proc = subprocess.Popen(
             [sys.executable, test.name],
             cwd=os.path.dirname(example_py),
-            )
+        )
         # else:
         #     proc = subprocess.Popen(["python", test.name], cwd=os.path.dirname(example_py))
         eel_port = get_process_listening_port(proc)
