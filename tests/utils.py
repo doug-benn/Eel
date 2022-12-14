@@ -18,7 +18,6 @@ TEST_DATA_DIR = Path(__file__).parent / "data"
 
 
 def get_process_listening_port(proc):
-    print(proc.pid)
     conn = None
     # if platform.system() == "Windows":
     current_process = psutil.Process(proc.pid)
