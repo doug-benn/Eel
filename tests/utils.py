@@ -37,7 +37,7 @@ def get_process_listening_port(proc):
         while psutil_proc.connections() == [] and not any(conn.status == "LISTEN" for conn in psutil_proc.connections()):
             time.sleep(0.01)
 
-            conn = next(filter(lambda conn: conn.status == "LISTEN", psutil_proc.connections()))
+        conn = next(filter(lambda conn: conn.status == "LISTEN", psutil_proc.connections()))
     return conn.laddr.port
 
 
