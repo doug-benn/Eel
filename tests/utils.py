@@ -67,6 +67,7 @@ import {os.path.splitext(os.path.basename(example_py))[0]}
             [sys.executable, test.name],
             cwd=os.path.dirname(example_py),
         )
+        time.sleep(1)
         # else:
         #     proc = subprocess.Popen(["python", test.name], cwd=os.path.dirname(example_py))
         eel_port = get_process_listening_port(proc)
