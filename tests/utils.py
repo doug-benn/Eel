@@ -19,25 +19,25 @@ TEST_DATA_DIR = Path(__file__).parent / "data"
 
 def get_process_listening_port(proc):
     conn = None
-    # if platform.system() == "Windows":
-    current_process = psutil.Process(proc.pid)
-    children = []
-    while children == []:
-        time.sleep(0.01)
-        children = current_process.children(recursive=True)
-        if (3, 6) <= sys.version_info < (3, 7):
-            children = [current_process]
-    for child in children:
-        while child.connections() == [] and not any(conn.status == "LISTEN" for conn in child.connections()):
+    if platform.system() == "Windows":
+        current_process = psutil.Process(proc.pid)
+        children = []
+        while children == []:
+            time.sleep(0.01)
+            children = current_process.children(recursive=True)
+            if (3, 6) <= sys.version_info < (3, 7):
+                children = [current_process]
+        for child in children:
+            while child.connections() == [] and not any(conn.status == "LISTEN" for conn in child.connections()):
+                time.sleep(0.01)
+
+            conn = next(filter(lambda conn: conn.status == "LISTEN", child.connections()))
+    else:
+        psutil_proc = psutil.Process(proc.pid)
+        while not any(conn is None and conn.status == "LISTEN" for conn in psutil_proc.connections()):
             time.sleep(0.01)
 
-        conn = next(filter(lambda conn: conn.status == "LISTEN", child.connections()))
-    # else:
-    #     psutil_proc = psutil.Process(proc.pid)
-    #     while not any(conn is None and conn.status == "LISTEN" for conn in psutil_proc.connections()):
-    #         time.sleep(0.01)
-
-    #         conn = next(filter(lambda conn: conn.status == "LISTEN", psutil_proc.connections()))
+            conn = next(filter(lambda conn: conn.status == "LISTEN", psutil_proc.connections()))
     return conn.laddr.port
 
 
